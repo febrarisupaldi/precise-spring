@@ -1,5 +1,6 @@
 package com.precise.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.precise.models.entities.Product;
+import com.precise.models.entities.Supplier;
 import com.precise.models.repos.ProductRepo;
 
 @Service
@@ -17,6 +19,9 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepo productRepo;
+	
+	@Autowired
+	private SupplierService supplierService;
 	
 	public Product save(Product product) {
 		return productRepo.save(product);
@@ -40,5 +45,35 @@ public class ProductService {
 	
 	public List<Product> findByName(String name){
 		return productRepo.findByNameContains(name);
+	}
+	
+	public void addSupplier(Supplier supplier, Long productId) {
+		Product product = findOne(productId);
+		if(product == null) {
+			throw new RuntimeException("Product ID not found");
+		}
+		
+		product.getSupplier().add(supplier);
+		save(product);
+	}
+	
+	public Product findByProductName(String name) {
+		return productRepo.findProductByName(name);
+	}
+	
+	public List<Product> findByProductNameLike(String name) {
+		return productRepo.findProductByNameLike("%"+name+"%");
+	}
+	
+	public List<Product> findByCategory(Long categoryId){
+		return productRepo.findProductByCategory(categoryId);
+	}
+	
+	public List<Product> findBySupplier(Long supplierId){
+		Supplier supplier = supplierService.findOne(supplierId);
+		if(supplier == null) {
+			return new ArrayList<Product>();
+		}
+		return productRepo.findProductBySupplier(supplier);
 	}
 }

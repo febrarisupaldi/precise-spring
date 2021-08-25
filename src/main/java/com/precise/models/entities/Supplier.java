@@ -12,8 +12,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
 @Table(name="supplier")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Supplier implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -34,6 +39,7 @@ public class Supplier implements Serializable{
 	private String email;
 	
 	@ManyToMany(mappedBy = "suppliers")
+	//@JsonBackReference
 	private Set<Product> products;
 
 	public Set<Product> getProduct() {

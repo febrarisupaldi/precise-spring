@@ -1,5 +1,7 @@
 package com.precise.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -18,13 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.precise.dto.ResponseData;
+import com.precise.dto.SearchData;
 import com.precise.dto.SupplierData;
 import com.precise.models.entities.Product;
 import com.precise.models.entities.Supplier;
 import com.precise.services.ProductService;
 
 @RestController
-@RequestMapping("product")
+@RequestMapping("/product")
 public class ProductController {
 
 	@Autowired
@@ -79,5 +82,30 @@ public class ProductController {
 	@DeleteMapping("/{id}")
 	public void removeOne(@PathVariable("id") Long id) {
 		productService.removeOne(id);
+	}
+	
+	@PostMapping("/{id}")
+	public void addSupplier(@RequestBody Supplier supplier, @PathVariable("id") Long productId) {
+		productService.addSupplier(supplier, productId);
+	}
+	
+	@PostMapping("/search/name")
+	public Product getProductByName(@RequestBody SearchData searchData) {
+		return productService.findByProductName(searchData.getSearchKey());
+	}
+	
+	@PostMapping("/search/namelike")
+	public List<Product> getProductByNameLike(@RequestBody SearchData searchData) {
+		return productService.findByProductNameLike(searchData.getSearchKey());
+	}
+	
+	@GetMapping("/search/category/{id}")
+	public List<Product> getProductByCategory(@PathVariable("id") Long categoryId){
+		return productService.findByCategory(categoryId);
+	}
+	
+	@GetMapping("/search/supplier/{id}")
+	public List<Product> getProductBySupplier(@PathVariable("id") Long supplierId){
+		return productService.findBySupplier(supplierId);
 	}
 }

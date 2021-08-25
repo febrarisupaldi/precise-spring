@@ -1,5 +1,7 @@
 package com.precise.controllers;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.precise.dto.ResponseData;
+import com.precise.dto.SearchData;
 import com.precise.dto.SupplierData;
 import com.precise.models.entities.Product;
 import com.precise.models.entities.Supplier;
@@ -79,5 +82,24 @@ public class SupplierController {
 		responseData.setPayload(supplierService.save(supplier));
 		return ResponseEntity.ok(responseData);
 	}
-
+	
+	@PostMapping("/search/email")
+	public Supplier findByEmail(@RequestBody SearchData searchData) {
+		return supplierService.findByEmail(searchData.getSearchKey());
+	}
+	
+	@PostMapping("/search/name")
+	public List<Supplier> findByName(@RequestBody SearchData searchData) {
+		return supplierService.findByName(searchData.getSearchKey());
+	}
+	
+	@PostMapping("/search/namestartwith")
+	public List<Supplier> findByNameStartWith(@RequestBody SearchData searchData) {
+		return supplierService.findByNameStartWith(searchData.getSearchKey());
+	}
+	
+	@PostMapping("/search/nameoremail")
+	public List<Supplier> findByNameOrEmail(@RequestBody SearchData searchData) {
+		return supplierService.findByNameOrEmail(searchData.getSearchKey(), searchData.getOtherSearchKey());
+	}
 }
