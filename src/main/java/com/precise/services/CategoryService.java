@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.precise.models.entities.Category;
@@ -37,6 +38,13 @@ public class CategoryService {
 		categoryRepo.deleteById(id);
 	}
 	
+	public Iterable<Category> findByName(String name, Pageable pageable){
+		return categoryRepo.findByNameContains(name, pageable);
+	}
+	
+	public Iterable<Category> saveBatch(Iterable<Category> categories){
+		return categoryRepo.saveAll(categories);
+	}
 //	public List<Category> findByName(String name){
 //		return categoryRepo.findByNameContains(name);
 //	}

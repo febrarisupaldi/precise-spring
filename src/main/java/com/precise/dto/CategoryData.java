@@ -3,6 +3,7 @@ package com.precise.dto;
 import javax.validation.constraints.NotEmpty;
 
 public class CategoryData {
+	
 	@NotEmpty(message="Name is required")
 	private String name;
 
